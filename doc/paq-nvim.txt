@@ -89,25 +89,41 @@ imported as `Paq`, we have:
 
 
 |Paq.install|                                                    *Paq.install*
-                                                               *:PaqInstall*
+                                                                 *:PaqInstall*
 
   Install all packages listed on your configuration, if a package is already
   installed, the function ignores it.
 
 
 |Paq.update|                                                      *Paq.update*
-                                                                *:PaqUpdate*
+                                                                  *:PaqUpdate*
 
   Update the installed packages listed on your configuration. If a package
   hasn't been installed with |PaqInstall|, the function ignores it.
 
 
 |Paq.clean|                                                        *Paq.clean*
-                                                                 *:PaqClean*
+                                                                   *:PaqClean*
 
   Remove packages that are on |paq-directory|, but aren't listed in your
   configuration.
 
+
+|Paq.setup_path|                                              *Paq.setup_path*
+
+
+  Setup |paq-directory| to point to a different location:
+>
+  lua require'paq-nvim'.setup_path('/path/to/new/paq-directory')
+<
+  Generates an error if the function fails.
+
+  Note: will not copy the contents of the previous |paq-directory|. This means
+  if packages have already been installed before this function is called, they
+  will no longer be managed by Paq.
+
+  Note: this function does not change vim's |packpath|. It is up to the user to
+  ensure that the directory passed in to this function exists in |packpath|.
 
 
 ==============================================================================
@@ -141,7 +157,7 @@ The options are the following:
   a package. Useful for packages that require extra configuration or
   building binaries.
 
-  If a string, Paq will execute the string as a shell command in the 
+  If a string, Paq will execute the string as a shell command in the
   directory of the package.
 
   If a function, Paq will execute the function right after installing
@@ -193,5 +209,15 @@ where Paq installs packages by running the command:
 If you have packages that aren't managed by Paq, you shouldn't put them on
 Paq's directory, since |Paq.clean| could delete them.
 
+A different package installation directory can optionally be set. Simply call
+the |Paq.setup| function with the new path:
+>
+    :lua require'paq-nvim'.setup('/path/to/new/paq-directory')
+<
+Running any Paq commands after this will use the new directory as the package
+installation directory.
+
+Note: if |Paq.setup| is given a directory that doesn't exist, |mkdir| will be
+called to silently create any directories in the path that doesn't yet exist.
 ==============================================================================
  vim:tw=78:ts=8:noet:ft=help:norl:
